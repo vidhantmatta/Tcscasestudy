@@ -6,7 +6,11 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///patient.db' 
 db = SQLAlchemy(app)
 
-
+@app.route('/')
+def login():
+    return render_template("login.html")
+    
+    
 #deskExecutive routes
 app.register_blueprint(deskExec)
 
