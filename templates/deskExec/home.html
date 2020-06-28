@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block head %}
+
+<title>Home</title>
+{% endblock %}
+
+{% block body %}
+    {% if(patients) %}
+    <br>
+    <h1>Home Page</h1>
+    <br>
+    <form action="/search" method="post">
+        <input class="form-control" type="text" name='ssnId' id='ssnId' placeholder="Enter SSN Id">
+        <br>
+        <input type='submit' value='Search'>
+    </form>
+    <br>
+    
+    <form action="/search" method='POST'>
+        <select name="ssnId"  class="selectpicker" data-live-search="true" data-size="5" data-width="100%" title="Search patient">
+            {% for patient in patients %}
+            <option value="{{patient.ssnId}}">{{patient.ssnId}},{{patient.name}}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <input  class="btn btn-light mt-4" type="submit" value="Search" />
+    </form>
+    {% endif %}
+    <br>
+    <a class="btn btn-success" href="/create">Create Patient</a>
+    {% if(patients) %}
+    <a class="btn btn-primary" href="/patients">view all patients</a>
+    {% endif %}
+
+{% endblock %}

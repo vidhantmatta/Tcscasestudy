@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>New Patient</title> 
+{% endblock %}
+
+{% block body %}
+    <h2>Create New Patient:</h2>
+    <form action='/create' method='POST'>
+        <label for="ssnId">Patient SSN Id:</label>
+        <input class="form-control" type="text" name='ssnId' id='ssnId' placeholder="Enter SSN Id">
+        <br>
+        <label for="name">Patient Name:</label>
+        <input class="form-control" type="text" name='name' id='name' placeholder="Enter name">
+        <br>
+        <label for="age">Patient Age:</label>
+        <input class="form-control" type="number" name='age' id='age' placeholder="Enter age">
+        <br>
+        <label for="admissionDate">Date of Admission:</label>
+        <input class="form-control" type="text" name='admissionDate' id='admissionDate' placeholder="Enter Date of Admission">
+        <br>
+        <label for="bedType">Type of Bed:</label>
+        <select class="form-control" id="bedType" name="bedType">
+            <option value="General Ward">General Ward</option>
+            <option value="Semi Sharing">Semi Sharing</option>
+            <option value="Single Room">Single room</option>
+        </select>
+        <br>
+        <label for="address">Address:</label>
+        <input class="form-control" type="text" name='address' id='address' placeholder="Enter address">
+        <br>
+        <label for="city">City:</label>
+        <input class="form-control" type="text" name='city' id='city' placeholder="Enter city">
+        <br>
+        <label for="state">State:</label>
+        <input class="form-control" type="text" name='state' id='state' placeholder="Enter state">
+        <br>
+        <input type='submit' value='Submit'>
+    </form>
+
+{% endblock %}

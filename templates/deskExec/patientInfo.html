@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>Patient Info</title> 
+{% endblock %}
+    
+{% block body %}
+
+    <h2>Patient Info</h2>
+    <p>Patient SSN Id: {{patient.ssnId}}</p>
+    <p>Patient Name: {{patient.name}}</p>
+    <p>Pateint Age: {{patient.age}}</p>
+    <p>Date of Admission: {{patient.admissionDate}}</p>
+    <p>Type of Bed: {{patient.bedType}}</p>
+    <p>Address: {{patient.address}}, {{patient.city}}, {{patient.state}}</p>
+    <p>Status: {{patient.status}}</p>
+    <br>
+    <a class="btn btn-danger" href='/delete/{{patient.id}}'>Delete</a>
+    <a class="btn btn-primary" href='/update/{{patient.id}}'>Edit</a>
+
+{% endblock %}
