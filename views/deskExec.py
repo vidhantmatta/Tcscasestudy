@@ -1,4 +1,4 @@
-from flask import Flask, Blueprint, render_template, request, redirect
+from flask import Flask, Blueprint, render_template, request, redirect, flash
 from models import Patient,db
 from flask_sqlalchemy import SQLAlchemy
 deskExec = Blueprint('deskExec',__name__,template_folder='./')
@@ -37,14 +37,19 @@ def new_post():
 
 @deskExec.route('/search', methods=['POST'])
 def search():
-    if request.method == 'POST':    
-        searched_ssnId = request.form['ssnId']
+    if request.method == 'POST':
+        search_ssnId = request.form['ssnId']
+        try:
+            searched_ssnId = int(search_ssnId)
+        except:
+            flash("Please Enter a valid Integer Id!" , "danger")
+            return redirect('/home')
         allPatients = Patient.query.all()
         for patient in allPatients:
             if(patient.ssnId == searched_ssnId):
                 return render_template('deskExec/patientInfo.html', patient= patient)
         return redirect('/home')
-    
+
 @deskExec.route('/delete/<int:id>')
 def delete(id):
     patient = Patient.query.get_or_404(id)
@@ -54,7 +59,7 @@ def delete(id):
 
 @deskExec.route('/update/<int:id>', methods=['GET', 'POST'])
 def update(id):
-    
+
     patient = Patient.query.get_or_404(id)
 
     if request.method == 'POST':

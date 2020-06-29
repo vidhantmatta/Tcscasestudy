@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, flash,url_for
 from flask_sqlalchemy import SQLAlchemy
 from views.deskExec import deskExec
 from views.pharmacist import pharmacist
@@ -13,6 +13,7 @@ db = SQLAlchemy(app)
 def login():
     return render_template("login.html")
 
+
 @app.route('/',methods=['POST'])
 def loginauth():
 
@@ -23,12 +24,13 @@ def loginauth():
         for user in alluser:
             if(user.username == patient_username and user.password == patient_pass):
                 if(user.role == "pharma"):
-                    return render_template("pharmacist/searchpatient.html")
+                    return redirect(url_for('pharmacist.allmedicines'))
                 if(user.role == "deskExec"):
                     allPatients = Patient.query.all()
                     return render_template("/deskExec/home.html", patients= allPatients)
 
         return redirect("/")
+
 
 #deskExecutive routes
 app.register_blueprint(deskExec)
@@ -40,5 +42,5 @@ app.register_blueprint(pharmacist)
 
 
 if __name__ == "__main__":
-	app.secret_key='secret123'
+    app.secret_key='secret123'
     app.run(debug=True)

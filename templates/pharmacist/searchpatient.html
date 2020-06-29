@@ -13,6 +13,7 @@
         </select>
         <br>
         <input  class="btn btn-primary mt-4" type="submit" value="Search" />
+        <!-- <a class="btn btn-success" href="/add_medicine">Add Medicine</a> -->
         {% if (patient) %}
         <div class="row align-items-center justify-content-around mx-0">
             <div id="table" class="col-lg-12  px-4 py-4  order-1 order-lg-2">
@@ -69,6 +70,9 @@
         </div>
         {% endif %}
     </form>
+    {% else %}
+      <h4>No patient in your Hospital.</h4>
+      <a class="btn btn-success" href="/add_medicine">Add Medicine</a>
     {% endif %}
     <br>
 

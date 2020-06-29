@@ -34,6 +34,13 @@ class Patient(db.Model):
     state = db.Column(db.String(20), nullable=False)
     status = db.Column(db.String(20), nullable=False, default="Active")
 
+
+    def __repr__(self):
+        return 'Patient' + str(self.id)
+
+
+
+
     def __repr__(self):
         return 'Patient' + str(self.id)
 
@@ -45,6 +52,7 @@ class Med(db.Model):
     Rate = db.Column(db.Integer, nullable = False)
 
 
+
 class Pmed(db.Model):
     pid = db.Column(db.Integer,db.ForeignKey('patient.id'),primary_key=True)
     medicineId = db.Column(db.Integer,db.ForeignKey('med.mid'), nullable = False)
@@ -53,7 +61,6 @@ class Pmed(db.Model):
     issueDate = db.Column(db.DateTime, default=datetime.now)
     patient = db.relationship("Patient", backref=backref('patients') )
     med = db.relationship("Med", backref=backref('medicines') )
-
 
 @event.listens_for(Engine, "connect")
 def set_sqlite_pragma(dbapi_connection, connection_record):

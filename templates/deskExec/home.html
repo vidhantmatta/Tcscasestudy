@@ -16,7 +16,7 @@
         <input type='submit' value='Search'>
     </form>
     <br>
-    
+
     <form action="/search" method='POST'>
         <select name="ssnId"  class="selectpicker" data-live-search="true" data-size="5" data-width="100%" title="Search patient">
             {% for patient in patients %}
@@ -28,9 +28,15 @@
     </form>
     {% endif %}
     <br>
-    <a class="btn btn-success" href="/create">Create Patient</a>
+
     {% if(patients) %}
+    <a class="btn btn-success" href="/create">Create Patient</a>
     <a class="btn btn-primary" href="/patients">view all patients</a>
+    {% else %}
+      <br/>
+      <h4>No Patient in your hospital. Please create one.</h4>
+      <br/>
+      <a class="btn btn-success" href="/create">Create Patient</a>
     {% endif %}
 
 {% endblock %}
