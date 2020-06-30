@@ -1,8 +1,12 @@
-from app import app,render_template, redirect, request, flash
+from app import app,render_template, redirect, request, flash, url_for
 from models import db, Patient, User
 from werkzeug.security import generate_password_hash,check_password_hash
 from flask_login import login_user, login_required, current_user, logout_user
 
+
+@app.route('/')
+def senduser():
+    return render_template('auth/login.html')    
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
