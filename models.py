@@ -34,24 +34,14 @@ class Patient(db.Model):
     state = db.Column(db.String(20), nullable=False)
     status = db.Column(db.String(20), nullable=False, default="Active")
 
-
     def __repr__(self):
         return 'Patient' + str(self.id)
-
-
-
-
-    def __repr__(self):
-        return 'Patient' + str(self.id)
-
 
 class Med(db.Model):
     mid = db.Column(db.Integer,primary_key=True)
     mname = db.Column(db.String(150), nullable = False , unique=True)
     quantity = db.Column(db.String(150), nullable = False)
     Rate = db.Column(db.Integer, nullable = False)
-
-
 
 class Pmed(db.Model):
     pid = db.Column(db.Integer,db.ForeignKey('patient.id'),primary_key=True)
@@ -61,6 +51,19 @@ class Pmed(db.Model):
     issueDate = db.Column(db.DateTime, default=datetime.now)
     patient = db.relationship("Patient", backref=backref('patients') )
     med = db.relationship("Med", backref=backref('medicines') )
+
+class DiagnosisTests(db.Model):
+    test_id = db.Column(db.Integer, primary_key=True)
+    test_name = db.Column(db.String(150), nullable=False, unique=True)
+    rate = db.Column(db.Integer, nullable=False)
+
+class PatientDiagnostic(db.Model):
+    pid = db.Column(db.Integer, db.ForeignKey('patient.id'), primary_key=True)
+    dtest_id = db.Column(db.Integer, db.ForeignKey('diagnosistests.test_id'), nullable=False)
+    # amount = db.Column(db.Integer, nullable=False)
+    patient = db.relationship("Patient", backref=backref('patients'))
+    # TODO: Handle the backref attribute for the below
+    # diagnosistests = db.relationship("DiagnosisTests", backref=backref(''))
 
 @event.listens_for(Engine, "connect")
 def set_sqlite_pragma(dbapi_connection, connection_record):
