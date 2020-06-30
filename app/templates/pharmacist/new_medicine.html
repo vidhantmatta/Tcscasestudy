@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>New Patient</title>
+{% endblock %}
+
+{% block body %}
+    <h2>Add New Medicine:</h2>
+    <form action='/add_medicine' method='POST'>
+        <label for="ssnId">Medicine Name:</label>
+        <input class="form-control" type="text" name='mname' id='mname' placeholder="Enter medicine name">
+        <br>
+        <label for="name">Total Quantity:</label>
+        <input class="form-control" type="text" name='quantity' id='quantity' placeholder="Enter total quantity">
+        <br>
+        <label for="age">Rate of Medicine:</label>
+        <input class="form-control" type="text" name='Rate' id='Rate' placeholder="Enter rate of medicine">
+        <br>
+        <input type='submit' value='Submit'>
+    </form>
+
+{% endblock %}
