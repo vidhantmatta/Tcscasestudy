@@ -158,3 +158,4 @@ pyvenv.cfg
 pip-selfcheck.json
 
 *.db
+patient.db
