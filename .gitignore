@@ -157,5 +157,10 @@ dmypy.json
 pyvenv.cfg
 pip-selfcheck.json
 
+#database
 *.db
 patient.db
+
+#intellij
+.idea/
+.idea/*
