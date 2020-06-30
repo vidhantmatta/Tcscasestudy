@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% block body %}
+    {% if (patients) %}
+    <br>
+    <h1>Patient Information</h1>
+    <br>
+    <h5>Enter Patient's SSNID</h5>
+    <form action="/pharmacist" method='POST'>
+        <select name="ssnId"  class="selectpicker" data-live-search="true" data-size="5" data-width="80%" title="Search patient">
+            {% for patient in patients %}
+            <option value="{{patient.ssnId}}">{{patient.ssnId}},{{patient.name}}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <input  class="btn btn-primary mt-4" type="submit" value="Search" />
+        {% if (patient) %}
+        <div class="row align-items-center justify-content-around mx-0">
+            <div id="table" class="col-lg-12  px-4 py-4  order-1 order-lg-2">
+                    <table class="table">
+                        <thead class="thead-dark">
+                          <tr>
+                            <th scope="col">Patient Id</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Age</th>
+                            <th scope="col">Address</th>
+                            <th scope="col">DOJ</th>
+                            <th scope="col">Type of Room</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+
+                            <tr>
+                                <td>{{patient.ssnId}}</td>
+                                <td>{{patient.name}}</td>
+                                <td>{{patient.age}}</td>
+                                <td>{{patient.address}}, {{patient.city}}, {{patient.state}}</td>
+                                <td>{{patient.admissionDate}}</td>
+                                <td>{{patient.bedType}}</td>
+                            </tr>
+
+                        </tbody>
+                      </table>
+                      <div class="row align-items-center justify-content-around mx-0">
+                          <div id="table" class="col-lg-12  px-4 py-4  order-1 order-lg-2">
+                                  <table class="table">
+                                      <thead class="thead-dark">
+                                        <tr>
+                                          <th scope="col">Name of the test</th>
+                                          <th scope="col">Amount</th>
+                                        </tr>
+                                      </thead>
+                                      <tbody>
+                                          {% for m,j in diagnosis %}
+                                          <tr>
+                                              <td>{{j[0].test_name}}</td>
+                                              <td>{{j[0].Rate}}</td>
+                                          </tr>
+                                        {% endfor %}
+                                      </tbody>
+                                    </table>
+                          </div>
+<!--                              this div most probably will go here. the div with id table line 44-->
+                          <a class="btn btn-success" href="">Add Diagnostics</a>
+                      </div>
+<!--                              don't know about this one, possibly here. div with class row in line 43-->
+            </div>
+        </div>
+        {% endif %}
+    </form>
+    {% endif %}
+    <br>
+
+{% endblock %}
