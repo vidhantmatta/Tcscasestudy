@@ -1,19 +1,11 @@
 {% extends 'base.html' %}
 
 {% block head %}
-<title>Patients</title> 
+<title>Patients</title>
 {% endblock %}
 
 {% block body %}
-<br>
-{% with messages = get_flashed_messages() %}
-    {% if messages %}
-        <div class="alert alert-danger" role="alert">
-            {{messages[0]}}
-        </div>    
-    {% endif %}
-{% endwith %}
-<br>
+
 {% if(patients) %}
 <div>
     <h1 style="display:inline">All Patients</h1>
