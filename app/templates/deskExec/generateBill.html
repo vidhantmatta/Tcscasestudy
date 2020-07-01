@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>Bill generation</title> 
+{% endblock %}
+
+{% block body %}
+<h3><small>Patient SSN Id: {{patient.ssnId}}</small></h3>
+<h3><small>Patient Name: {{patient.name}}</small></h3>
+<h3><small>Medicines:</small></h3>
+<table class="table table-borderless">
+    <thead>
+        <tr>
+            <th scope="col">Medicine</th>
+            <th scope="col">Quantity</th>
+            <th scope="col">Amount</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for med in medicines %}
+        <tr>
+            <th>{{med.med.mname}}</th>
+            <th>{{med.quant}}</th>
+            <th>{{med.amount}}</th>
+        </tr>
+        {% endfor %}
+        <hr>
+        <tr>
+            <th><strong>Total</strong></th>
+            <th></th>
+            <th>{{medAmount}}</th>
+        </tr>
+    </tbody>
+</table>
+<h3><small>Tests:</small></h3>
+<table class="table table-borderless">
+    <thead>
+        <tr>
+            <th scope="col">Test</th>
+            <th scope="col">Amount</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for test in tests %}
+        <tr>
+            <th>{{test.diagnosistests.test_name}}</th>
+            <th>{{test.amount}}</th>
+        </tr>
+        {% endfor %}
+        <hr>
+        <tr>
+            <th><strong>Total</strong></th>
+            <th>{{testAmount}}</th>
+        </tr>
+    </tbody>
+</table>
+<h3><small>Patient room charge: {{roomCharge}}</small></h3>
+<h3><small>Total Amount: {{total}}</small></h3>
+
+<a class="btn btn-primary" href='/discharge/{{patient.id}}'>Discharge</a>
+
+
+{% endblock %}
