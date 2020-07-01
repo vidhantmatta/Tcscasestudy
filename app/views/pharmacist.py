@@ -35,11 +35,18 @@ def patientmedinfo(ssn):
         return render_template('auth/accessDenied.html')
     patient = Patient.query.filter_by(ssnId = ssn).first()
     medicine = Pmed.query.filter_by(pid=patient.id).all()
-    medi=[]
+    patientmedlist=[]
     for med in medicine:
-        medi.append(Med.query.filter_by(mid=med.medicineId).all())
+        patmedDict = {}
+        issuedMed = Med.query.filter_by(mid=med.medicineId)[0]
+        patmedDict['name'] = issuedMed.mname
+        patmedDict['quantity'] = med.quant
+        patmedDict['rate'] = issuedMed.Rate
+        patmedDict['amount'] = med.amount
+
+        patientmedlist.append(patmedDict)
     allPatients = Patient.query.all()
-    return render_template('pharmacist/searchpatient.html', ssn=ssn, newMed=newMed, patient= patient,medicine= zip(medicine,medi),patients=allPatients)
+    return render_template('pharmacist/searchpatient.html', ssn=ssn, newMed=newMed, patient= patient,medicine= patientmedlist,patients=allPatients)
     #
     # return redirect('/pharmacist_dashboard')
 

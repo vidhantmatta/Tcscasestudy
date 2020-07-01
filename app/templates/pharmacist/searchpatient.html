@@ -42,30 +42,32 @@
                         </tbody>
                       </table><br/>
                       <div class="row align-items-center justify-content-around mx-0">
+                          {% if medicine %}
                           <h4>Medicines Issued</h4>
                           <div id="table" class="col-lg-12  px-4 py-4  order-1 order-lg-2">
                                   <table class="table">
                                       <thead class="thead-dark">
                                         <tr>
-                                          <th scope="col">Medicine_name</th>
-                                          <th scope="col">Medicine_quantity</th>
-                                          <th scope="col">Medicine_rate</th>
-                                          <th scope="col">Medicine_amount</th>
+                                          <th scope="col">Medicine name</th>
+                                          <th scope="col">Medicine quantity</th>
+                                          <th scope="col">Medicine rate</th>
+                                          <th scope="col">Medicine amount</th>
 
                                         </tr>
                                       </thead>
                                       <tbody>
-                                          {% for m,j in medicine %}
+                                          {% for m in medicine %}
                                           <tr>
-                                              <td>{{j[0].mname}}</td>
-                                              <td>{{m.quant}}</td>
-                                              <td>{{j[0].Rate}}</td>
-                                              <td>{{m.amount}}</td>
+                                              <td>{{ m['name'] }}</td>
+                                              <td>{{ m['quantity'] }}</td>
+                                              <td>{{ m['rate'] }}</td>
+                                              <td>{{ m['amount'] }}</td>
 
                                           </tr>
                                         {% endfor %}
                                       </tbody>
                                     </table>
+                              {% endif %}
                               {% if not newMed%}
                               <div class="row align-items-center justify-content-around mx-0">
                               <a class="btn btn-success align-centre" href="/issuemedicine/{{ssn}}">Issue Medicine</a>
@@ -77,11 +79,10 @@
                                   <table class="table">
                                       <thead class="thead-dark">
                                         <tr>
-                                          <th scope="col">Medicine_name</th>
-                                          <th scope="col">Medicine_quantity</th>
-                                          <th scope="col">Medicine_rate</th>
-                                          <th scope="col">Medicine_amount</th>
-                                          <th scope="col"><a class="btn btn-danger"  href="/issuemedicine/{{ssn}}">Add</a></th>
+                                          <th scope="col">Medicine name</th>
+                                          <th scope="col">Medicine quantity</th>
+                                          <th scope="col">Medicine rate</th>
+                                          <th scope="col">Medicine amount</th>
 
                                         </tr>
                                       </thead>
@@ -92,12 +93,14 @@
                                               <td>{{med['quant']}}</td>
                                               <td>{{med['rate']}}</td>
                                               <td>{{med['amount']}}</td>
-
+                                              <td><a href="#"<span class="glyphicon glyphicon-remove"></span></a></td>
                                           </tr>
                                           {% endfor %}
                                       </tbody>
                                   </table>
+                          <div class="row align-items-center justify-content-around mx-0">
                           <a class="btn btn-success" href="/updatelist/{{ssn}}">Update</a>
+                          </div>
                           {% endif %}
                           </div>
 
@@ -113,3 +116,6 @@
 
 
 {% endblock %}
+for med in list:
+    x = Patientdiagnostic.query.filter_by(
+    if med['name']
