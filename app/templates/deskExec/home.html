@@ -22,7 +22,7 @@
     <form action="/search" method='POST'>
         <select name="ssnId"  class="selectpicker" data-live-search="true" data-size="5" data-width="80%" title="Search patient">
             {% for patient in patients %}
-            <option value="{{patient.ssnId}}">{{patient.ssnId}},{{patient.name}}</option>
+            <option value="{{patient.ssnId}}">{{patient.ssnId}}</option>
             {% endfor %}
         </select>
         <br>
