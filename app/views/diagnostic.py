@@ -36,10 +36,12 @@ def patienttestinfo(ssn):
         return render_template('auth/accessDenied.html')
     patient = Patient.query.filter_by(ssnId=ssn).first()
     tests = Patientdiagnostic.query.filter_by(pid=patient.id).all()
-    testsList = {}
+    testsList = []
     for test in tests:
+        tempTest = {}
         name = Diagnosistests.query.filter_by(test_id=test.dtest_id)[0].test_name
-        testsList[name] = Diagnosistests.query.filter_by(test_id=test.dtest_id)[0].rate
+        tempTest[name] = Diagnosistests.query.filter_by(test_id=test.dtest_id)[0].rate
+        testsList.append(tempTest)
     print("Test list has: ")
     print(testsList)
     allPatients = Patient.query.all()

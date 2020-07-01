@@ -64,11 +64,13 @@
               </tr>
             </thead>
             <tbody>
-              {% for t, r in diagnosis.items() %}
+              {% for test in diagnosis %}
+                {% for t,r in test.items() %}
               <tr>
                 <td>{{t}}</td>
                 <td>{{r}}</td>
               </tr>
+              {% endfor %}
               {% endfor %}
             </tbody>
           </table>
