@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>New Test</title>
+{% endblock %}
+
+{% block body %}
+    <h2>Add New Test to Database:</h2>
+    <form action='/add_diagdb' method='POST'>
+        <label for="tName">Test Name:</label>
+        <input class="form-control" type="text" name='tName' id='tName' placeholder="Enter test name">
+        <br>
+        <label for="tRate">Rate of Test: </label>
+        <input class="form-control" type="text" name='tRate' id='tRate' placeholder="Enter rate of the test">
+        <br>
+        <input type='submit' value='Submit'>
+    </form>
+
+{% endblock %}
