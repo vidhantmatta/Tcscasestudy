@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block head %}
+
+<title>Issue Medicine</title>
+{% endblock %}
+
+{% block body %}
+    <br>
+    <h1>Search Medicine</h1>
+    <form action="/addnewmed/{{ssn}}" method='POST'>
+        <select name="mname"  class="selectpicker" data-live-search="true" data-size="5" data-width="100%" title="Search Medicine">
+            {% for med in meds %}
+            <option value="{{med.mname}}">{{med.mname}}</option>
+            {% endfor %}
+        </select>
+        <br><br>
+        <input class="form-control" type="number" name='quantity' id='quantity' placeholder="Enter quantity">
+        <br>
+        <input  class="btn btn-light mt-4" type="submit" value="Issue" />
+    </form>
+{% endblock %}
