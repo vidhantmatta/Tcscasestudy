@@ -33,7 +33,8 @@ class Med(db.Model):
     Rate = db.Column(db.Integer, nullable = False)
 
 class Pmed(db.Model):
-    pid = db.Column(db.Integer,db.ForeignKey('patient.id'),primary_key=True)
+    id = db.Column(db.Integer,primary_key=True)
+    pid = db.Column(db.Integer,db.ForeignKey('patient.id'))
     medicineId = db.Column(db.Integer,db.ForeignKey('med.mid'), nullable = False)
     quant = db.Column(db.String(150), nullable = False)
     amount = db.Column(db.Integer ,nullable=False)
