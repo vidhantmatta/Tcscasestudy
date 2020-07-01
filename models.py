@@ -48,7 +48,8 @@ class Diagnosistests(db.Model):
     rate = db.Column(db.Integer, nullable=False)
 
 class Patientdiagnostic(db.Model):
-    pid = db.Column(db.Integer, db.ForeignKey('patient.id'), primary_key=True)
+    id = db.Column(db.Integer,primary_key=True)
+    pid = db.Column(db.Integer, db.ForeignKey('patient.id'))
     dtest_id = db.Column(db.Integer, db.ForeignKey('diagnosistests.test_id'), nullable = False)
     amount = db.Column(db.Integer, nullable=False)
     issueDate = db.Column(db.DateTime, default=datetime.now)
