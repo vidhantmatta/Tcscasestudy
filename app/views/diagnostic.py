@@ -1,9 +1,10 @@
 from app import app, Flask, render_template, request, redirect,url_for,flash
 from models import Patient,Patientdiagnostic,Diagnosistests,db
 from flask_login import login_required, current_user
+from sqlalchemy.exc import IntegrityError
 
 
-tempPatientTests = {}
+tempPatientTests = []
 
 @app.route('/diagnostic_dashboard')
 @login_required
@@ -26,46 +27,64 @@ def diagnosticinfo():
             flash("Please Enter a valid Integer Id!", "danger")
             print("please enter an integer")
             return redirect('/diagnostic_dashboard')
-        patient = Patient.query.filter_by(ssnId = search_ssnId).first()
-        tests = Patientdiagnostic.query.filter_by(pid=patient.id).all()
-        testsList=[]
-        # TODO: Get the temporary list after the add function is executed and pass it below
-        tempTests = tempPatientTests
-        for test in tests:
-            testsList.append(Diagnosistests.query.filter_by(test_id=test.dtest_id).all())
-        print(testsList)
-        allPatients = Patient.query.all()
-        return render_template('diagnostic/searchPatientDiagnostic.html', patient=patient, diagnosis=zip(tests, testsList),
-                                       patients=allPatients, dTestDict = tempTests)
+        return redirect(url_for('patienttestinfo', ssn=searched_ssnId))
 
-        return redirect('/diagnostic_dashboard')
+@app.route('/diagnostic/<int:ssn>', methods=['GET', 'POST'])
+@login_required
+def patienttestinfo(ssn):
+    if(current_user.role != 'diag'):
+        return render_template('auth/accessDenied.html')
+    patient = Patient.query.filter_by(ssnId=ssn).first()
+    tests = Patientdiagnostic.query.filter_by(pid=patient.id).all()
+    testsList = {}
+    for test in tests:
+        name = Diagnosistests.query.filter_by(test_id=test.dtest_id)[0].test_name
+        testsList[name] = Diagnosistests.query.filter_by(test_id=test.dtest_id)[0].rate
+    print("Test list has: ")
+    print(testsList)
+    allPatients = Patient.query.all()
+    return render_template('diagnostic/searchPatientDiagnostic.html',ssn = ssn, dTestList = tempPatientTests, patient=patient, diagnosis=testsList,
+                           patients=allPatients)
+
+@app.route('/issuetest/<int:ssn>', methods=['GET','POST'])
+@login_required
+def issuetest(ssn):
+    if current_user.role != 'diag':
+        return render_template('auth/accessDenied.html')
+    allTests = Diagnosistests.query.all()
+    return render_template('diagnostic/new_test.html', tests=allTests, ssn=ssn)
 
 # This is to add the test to the temporary list when "Add Diagnosis" is pressed
-@app.route('/add_test/<int:ssn_id>', methods=['GET', 'POST'])
+@app.route('/add_test/<int:ssn>', methods=['GET', 'POST'])
 @login_required
-def new_test(ssn_id):
+def new_test(ssn):
     if(current_user.role != 'diag'):
         return render_template('auth/accessDenied.html')
     if request.method == 'POST':
-            test_name= request.form['tName']
-            test_rate = request.form['tRate']
-            patient = Patient.query.filter_by(ssnId = ssn_id).first()
-            print("ssn id is: " + ssn_id)
-            print("name is : " + patient.id)
-            # To verify that the Test is not already added in the temporary list
-            if test_name not in tempPatientTests:
-                print('Received values from form: ' +test_name + ' ' + test_rate)
-                tempPatientTests[test_name] = test_rate
-                print(tempPatientTests[test_name])
-                flash("New Test added","success")
-                # We need to pass the dictionary value here below for the temporary list to work
-                return redirect('/diagnostic', patient=patient, dTestDict = tempPatientTests ) 
-                # TODO: The upper logic doesnt seem to work. Need to Work on a fix
-            else:
-                flash("Test already exist","danger")
-                return render_template('diagnostic/new_test.html')
-    else:
-        return render_template('diagnostic/new_test.html')
+        test_name= request.form['test_name']
+        requiredTest = Diagnosistests.query.filter_by(test_name=test_name)[0]
+        patient = Patient.query.filter_by(ssnId = ssn).first()
+        # To verify that the Test is not already added in the temporary list
+        testDict = {}
+        testDict['testId'] = requiredTest.test_id
+        testDict['pid'] = patient.id
+        testDict['name'] = test_name
+        testDict['rate'] = requiredTest.rate
+        tempPatientTests.append(testDict)
+        print(testDict['name'])
+        return redirect(url_for('patienttestinfo', ssn=ssn))
+
+@app.route('/updatetest/<int:ssn>', methods=['GET','POST'])
+@login_required
+def updateTestList(ssn):
+    if (current_user.role != 'diag'):
+        return render_template('auth/accessDenied.html')
+    for test in tempPatientTests:
+        newTest = Patientdiagnostic(pid=test['pid'], dtest_id=test['testId'], amount = test['rate'])
+        db.session.add(newTest)
+        db.session.commit()
+    tempPatientTests.clear()
+    return redirect(url_for('patienttestinfo',ssn=ssn))
 
 # Endpoint to display all the diagnosis tests available in the hospital
 @app.route('/all_tests')
