@@ -72,6 +72,7 @@
                               <div class="row align-items-center justify-content-around mx-0">
                               <a class="btn btn-success align-centre" href="/issuemedicine/{{ssn}}">Issue Medicine</a>
                               </div>
+
                            {% endif %}
                           </div>
                           {% if newMed %}
@@ -83,7 +84,7 @@
                                           <th scope="col">Medicine quantity</th>
                                           <th scope="col">Medicine rate</th>
                                           <th scope="col">Medicine amount</th>
-
+                                          <th scope="col"><a class="btn btn-primary align-centre" href="/issuemedicine/{{ssn}}">+ Add</a></th>
                                         </tr>
                                       </thead>
                                       <tbody>
@@ -93,7 +94,7 @@
                                               <td>{{med['quant']}}</td>
                                               <td>{{med['rate']}}</td>
                                               <td>{{med['amount']}}</td>
-                                              <td><a href="#"<span class="glyphicon glyphicon-remove"></span></a></td>
+                                              <td><a href="#"><span class="glyphicon glyphicon-remove"></span></a></td>
                                           </tr>
                                           {% endfor %}
                                       </tbody>
@@ -113,9 +114,4 @@
       <a class="btn btn-success" href="/add_medicine">Add Medicine</a>
     {% endif %}
     <br>
-
-
 {% endblock %}
-for med in list:
-    x = Patientdiagnostic.query.filter_by(
-    if med['name']
