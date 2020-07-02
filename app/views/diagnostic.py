@@ -6,14 +6,21 @@ from sqlalchemy.exc import IntegrityError
 
 tempPatientTests = []
 
+# This block of code is used to render list of active patients in the hospital..
 @app.route('/diagnostic_dashboard')
 @login_required
 def diag():
+    #Checks if user is diagnostic service executive. If not,deny access to further pages.
     if(current_user.role != 'diag'):
         return render_template('auth/accessDenied.html')
-    allPatients = Patient.query.all()
+    allPatients = Patient.query.filter_by(status="Active").all()
     return render_template('diagnostic/searchPatientDiagnostic.html', patients=allPatients)
 
+
+"""
+This block of code is used to search patients using their 'ssnID' in order to
+find out information about their tests and diagnosis.
+"""
 @app.route('/diagnostic', methods=['GET','POST'])
 @login_required
 def diagnosticinfo():
@@ -29,6 +36,12 @@ def diagnosticinfo():
             return redirect('/diagnostic_dashboard')
         return redirect(url_for('patienttestinfo', ssn=searched_ssnId))
 
+
+
+"""
+This block of code renders all the examinations and tests undertaken for a particular patient
+along with patient's details...
+"""
 @app.route('/diagnostic/<int:ssn>', methods=['GET', 'POST'])
 @login_required
 def patienttestinfo(ssn):
@@ -37,6 +50,7 @@ def patienttestinfo(ssn):
     patient = Patient.query.filter_by(ssnId=ssn).first()
     tests = Patientdiagnostic.query.filter_by(pid=patient.id).all()
     testsList = []
+    # storing patient's examinations history in a dictionary.....
     for test in tests:
         tempTest = {}
         name = Diagnosistests.query.filter_by(test_id=test.dtest_id)[0].test_name
@@ -48,6 +62,10 @@ def patienttestinfo(ssn):
     return render_template('diagnostic/searchPatientDiagnostic.html',ssn = ssn, dTestList = tempPatientTests, patient=patient, diagnosis=testsList,
                            patients=allPatients)
 
+
+
+
+# This block is used to prescribe new test to the patient by rendering a form page...
 @app.route('/issuetest/<int:ssn>', methods=['GET','POST'])
 @login_required
 def issuetest(ssn):
@@ -56,7 +74,10 @@ def issuetest(ssn):
     allTests = Diagnosistests.query.all()
     return render_template('diagnostic/new_test.html', tests=allTests, ssn=ssn)
 
-# This is to add the test to the temporary list when "Add Diagnosis" is pressed
+
+
+
+# This is to add the test to the temporary list when "Add Diagnosis" is pressed...
 @app.route('/add_test/<int:ssn>', methods=['GET', 'POST'])
 @login_required
 def new_test(ssn):
@@ -76,6 +97,9 @@ def new_test(ssn):
         print(testDict['name'])
         return redirect(url_for('patienttestinfo', ssn=ssn))
 
+
+
+# This block of code finally updates the old diagnostic table of patient with the new diagnosis data.
 @app.route('/updatetest/<int:ssn>', methods=['GET','POST'])
 @login_required
 def updateTestList(ssn):
@@ -88,7 +112,10 @@ def updateTestList(ssn):
     tempPatientTests.clear()
     return redirect(url_for('patienttestinfo',ssn=ssn))
 
-# Endpoint to display all the diagnosis tests available in the hospital
+
+
+
+# Endpoint to display all the tests available in the hospital
 @app.route('/all_tests')
 @login_required
 def alltests():
@@ -97,9 +124,11 @@ def alltests():
     dTestsList = Diagnosistests.query.all()
     return render_template('diagnostic/tests.html', dTestList=dTestsList)
 
-# ********** EXTRA UTILITY FUNCTION ********** 
 
-# This route is intended to just add new tests into the database.
+
+# ************* EXTRA UTILITY FUNCTION *******************************
+
+# This route is intended to add new tests into the database.
 @app.route('/add_diagdb', methods=['GET', 'POST'])
 @login_required
 def new_diagDB():
