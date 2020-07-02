@@ -199,7 +199,7 @@ def discharge(id):
     medicines = Pmed.query.filter_by(pid=patient.id).all()
     tests = Patientdiagnostic.query.filter_by(pid=patient.id).all()
 
-    patientDoj = patient.admissionDate.split("/")
+    patientDoj = patient.admissionDate.split("-")
     currDate = str(datetime.now())[:10].split("-")
     diff = datetime(int(currDate[0]),int(currDate[1]),int(currDate[2]))-datetime(int(patientDoj[0]),int(patientDoj[1]),int(patientDoj[2]))
     activeDays = str(diff).split(",")[0]
@@ -251,7 +251,7 @@ def history(id):
 
 
 
-# This route is use to re-active the patient if he gets admitted again and change hihs status to "active"...
+# This route is use to re-active the patient if he gets admitted again and change his status to "active"...
 @app.route("/reactivate/<int:id>")
 @login_required
 def reactivate(id):
