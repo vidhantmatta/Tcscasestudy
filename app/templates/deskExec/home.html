@@ -7,15 +7,7 @@
 
 {% block body %}
 <br>
-    
-    <!--<br>
-    <h1>Home Page</h1>
-    <br>
-    <form action="/search" method="post">
-        <input class="form-control" type="text" name='ssnId' id='ssnId' placeholder="Enter SSN Id">
-        <br>
-        <input type='submit' value='Search'>
-    </form>-->
+
     {% if(patients) %}
     <br>
     <h5>Enter Patient's SSNID</h5>
@@ -29,9 +21,7 @@
         <input  class="btn btn-light mt-4" type="submit" value="Search" />
     </form>
     <br>
-    <!--
-    <a class="btn btn-success" href="/create">Create Patient</a>
-    <a class="btn btn-primary" href="/patients">view all patients</a>-->
+  
     {% else %}
     <p class="display-4">No active patients</p>
     <a class="btn btn-success" href="/create">Create Patient</a>
