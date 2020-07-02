@@ -56,6 +56,16 @@ class Patientdiagnostic(db.Model):
     patient = db.relationship("Patient", backref=backref('diagpatients'))
     diagnosistests = db.relationship("Diagnosistests", backref=backref('diagnosistests'))
 
+class History(db.Model):
+    id = db.Column(db.Integer,primary_key=True)
+    hid = db.Column(db.Integer,db.ForeignKey('patient.id'))
+    tests = db.Column(db.String(150), nullable = True)
+    medicines = db.Column(db.String(150), nullable = True)
+    dischargeDate = db.Column(db.String(10), nullable=False)
+    activeDays = db.Column(db.String(15), nullable = False)
+
+
+
 @event.listens_for(Engine, "connect")
 def set_sqlite_pragma(dbapi_connection, connection_record):
     cursor = dbapi_connection.cursor()

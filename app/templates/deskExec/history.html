@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block head %}
+
+<title>Patient History</title>
+{% endblock %}
+
+{% block body %}
+<br>
+    {% if histories %}
+        <p class="display-4">Patient SSN Id: {{patient.ssnId}}</p>
+        <p class="display-4">Patient Name: {{patient.name}}</p>
+        {% for history in histories %}
+            <div class="card my-4" style="width: 100%;">
+                <div class="card-header" style="background-color: #0288D1;">
+                    <h4 class="text-white"><small>Discharge Date: {{history.dischargeDate}}</small></h4>
+                </div>
+                <div class="card-body">
+                    <h4><small>Medicines Issued: {{history.medicines}}</small></h4>
+                    <h4><small>Diagnostics Done: {{history.tests}}</small></h4>
+                    <h4><small>Active for: {{history.activeDays}}</small></h4>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+    <p class="display-4">No History exists</p>
+    {% endif %}
+
+{% endblock %}

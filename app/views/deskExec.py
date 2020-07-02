@@ -1,5 +1,6 @@
 from app import app,render_template, redirect, request, flash
-from models import db, Patient, Med, Pmed, Diagnosistests, Patientdiagnostic
+from models import db, Patient, Med, Pmed, Diagnosistests, Patientdiagnostic, History
+from datetime import datetime
 from flask_login import login_required, current_user
 
 @app.route("/home")
@@ -25,12 +26,6 @@ def new_patient():
 
     if request.method == 'POST':
         patient_ssnId = request.form['ssnId']
-        if(not len(patient_ssnId)==9 or not patient_ssnId.isdigit()):
-            flash("ssnId must be a 9 digit number" , "danger")
-            return redirect('/create')
-        if(Patient.query.filter_by(ssnId=patient_ssnId).first()):
-            flash("Patient with the same ssnId already exists in the database" , "danger")
-            return redirect('/home')
         patient_name = request.form['name']
         patient_age = request.form['age']
         patient_admissionDate = request.form['admissionDate']
@@ -38,10 +33,23 @@ def new_patient():
         patient_address = request.form['address']
         patient_city = request.form['city']
         patient_state = request.form['state']
+        if(not len(patient_ssnId)==9 or not patient_ssnId.isdigit()):
+            flash("ssnId must be a 9 digit number" , "danger")
+            return render_template("deskExec/newPatient.html", patient_ssnId=patient_ssnId,patient_name=patient_name,patient_age=patient_age,
+            patient_admissionDate=patient_admissionDate, patient_city=patient_city,patient_state=patient_state)
+            #return redirect('/create')
+
+        if(Patient.query.filter_by(ssnId=patient_ssnId).first()):
+            flash("Patient with the same ssnId already exists in the database" , "danger")
+            return redirect('/home')
+
         if(len(patient_name)==0 or len(str(patient_age))==0 or len(patient_admissionDate)==0 or len(patient_bedType)==0 
         or len(patient_address)==0 or len(patient_city)==0 or len(patient_state)==0):
             flash("No field must be empty" , "danger")
-            return redirect('/create')
+            #return redirect('/create')
+            return render_template("deskExec/newPatient.html", patient_ssnId=patient_ssnId,patient_name=patient_name,patient_age=patient_age,
+            patient_admissionDate=patient_admissionDate, patient_city=patient_city,patient_state=patient_state)
+
         newPatient = Patient(ssnId=patient_ssnId, name=patient_name, age=patient_age, admissionDate=patient_admissionDate,
         bedType =patient_bedType, address=patient_address, city=patient_city, state=patient_state)
         db.session.add(newPatient)
@@ -128,7 +136,7 @@ def generateBill(id):
 
     for test in tests:
         testAmount+=test.amount
-        #print(med.med.mname, med.quant, med.amount)
+
     if(patient.bedType == "General Ward"):
         roomCharge = 500
     elif(patient.bedType == "Semi Sharing"):
@@ -151,6 +159,27 @@ def discharge(id):
     medicines = Pmed.query.filter_by(pid=patient.id).all()
     tests = Patientdiagnostic.query.filter_by(pid=patient.id).all()
 
+    patientDoj = patient.admissionDate.split("-")
+    currDate = str(datetime.now())[:10].split("-")
+    diff = datetime(int(currDate[0]),int(currDate[1]),int(currDate[2]))-datetime(int(patientDoj[0]),int(patientDoj[1]),int(patientDoj[2]))
+    activeDays = str(diff).split(",")[0]
+
+    #adding history
+    hid = id
+    Tests = ""
+    Meds = ""
+    for test in tests:
+        Tests += ", " + test.diagnosistests.test_name
+    for med in medicines:
+        Meds += ", " + med.med.mname
+    
+    hTests = Tests[1:]
+    hMeds = Meds[1:]
+
+    newHistory = History(hid=hid, tests=hTests, medicines=hMeds, activeDays=activeDays, dischargeDate=str(datetime.now())[:10])
+    db.session.add(newHistory)
+    db.session.commit()
+
     #deleting medicines for current session after discharge
     for medicine in medicines:
         db.session.delete(medicine)
@@ -164,6 +193,17 @@ def discharge(id):
     flash('Patient discharged','success')
     return redirect('/patients')
     
+@app.route("/history/<int:id>")
+@login_required
+def history(id):
+    if(current_user.role != 'desk'):
+        return render_template('auth/accessDenied.html')
+
+    patient = Patient.query.get_or_404(id)
+    histories = History.query.filter_by(hid=id).all()
+    histories.reverse()
+    return render_template("deskExec/history.html", histories = histories, patient = patient)
+
 
 @app.route("/reactivate/<int:id>")
 @login_required
@@ -172,6 +212,7 @@ def reactivate(id):
         return render_template('auth/accessDenied.html')
     
     patient = Patient.query.get_or_404(id)
+    patient.admissionDate = str(datetime.now())[:10]
     patient.status = "Active"
     db.session.commit()
 

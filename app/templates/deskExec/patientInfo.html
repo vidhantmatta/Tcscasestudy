@@ -17,6 +17,7 @@
     <br>
     <a class="btn btn-danger" href='/delete/{{patient.id}}'>Delete</a>
     <a class="btn btn-primary" href='/update/{{patient.id}}'>Edit</a>
+    <a class="btn btn-primary" href='/history/{{patient.id}}'>Check History</a>
     {% if patient.status == "Active" %}
     <a class="btn btn-primary" href='/generateBill/{{patient.id}}'>Generate Bill</a>
     {% endif %}
