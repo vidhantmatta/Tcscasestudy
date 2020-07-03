@@ -34,7 +34,6 @@ def signup():
         # Use of flash to show appropriate messages....
         flash('user created.','success')
         return redirect('/signup')
-
     else:
         return render_template('auth/signup.html')
 

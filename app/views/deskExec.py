@@ -251,6 +251,7 @@ def history(id):
 
 
 
+
 # This route is use to re-active the patient if he gets admitted again and change hihs status to "active"...
 @app.route("/reactivate/<int:id>")
 @login_required

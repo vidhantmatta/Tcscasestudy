@@ -160,4 +160,5 @@ def updatemedlist(ssn):
         db.session.add(obj)
         db.session.commit()
     newMed.clear()
+    flash('Medicines Issued Succesfully !',"success")
     return redirect(url_for('patientmedinfo',ssn=ssn))
