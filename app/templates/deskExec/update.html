@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block head %}
-<title>Edit Patient Details</title>
+<title>Edit Post</title>
 {% endblock %}
 
 {% block body %}
@@ -19,7 +19,7 @@
         <input class="form-control" type="number" name='age' id='age' value="{{patient.age}}">
         <br>
         <label for="admissionDate">Date of Admission:</label>
-        <input class="form-control" type="text" name='admissionDate' id='admissionDate' value="{{patient.admissionDate}}">
+        <input autocomplete="off" type="text" class="form-control datepicker" name='admissionDate' id='admissionDate' value="{{patient.admissionDate}}"/>
         <br>
         <label for="bedType">Type of Bed:</label>
         <select class="form-control" id="bedType" name="bedType">
