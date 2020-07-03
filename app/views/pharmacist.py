@@ -82,7 +82,7 @@ def new_medi():
         # Checks if medicine already exist....
         except IntegrityError:
             db.session.rollback()
-            flash("Medicine already exist","danger")
+            flash("Medicine already exists","danger")
             return render_template('pharmacist/new_medicine.html')
     else:
         return render_template('pharmacist/new_medicine.html')
@@ -161,4 +161,5 @@ def updatemedlist(ssn):
         db.session.add(obj)
         db.session.commit()
     newMed.clear()
+    flash('Medicines Issued Succesfully !',"success")
     return redirect(url_for('patientmedinfo',ssn=ssn))
