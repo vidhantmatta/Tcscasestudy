@@ -22,7 +22,7 @@ def signup():
         user = User.query.filter_by(username=username).first()
 
         if user:
-            flash('user already exists','danger')
+            flash('user already exists!','danger')
             return redirect('/signup')
 
         newUser = User(username=username,
@@ -32,7 +32,7 @@ def signup():
         db.session.commit()
 
         # Use of flash to show appropriate messages....
-        flash('user created','success')
+        flash('user created.','success')
         return redirect('/signup')
 
     else:
@@ -51,27 +51,28 @@ def login():
 
         user = User.query.filter_by(username=username).first()
         if not user:
-            flash('Wrong username','danger')
+            flash('Wrong username!','danger')
             return redirect('login')
         elif not check_password_hash(user.password,password):
-            flash('Password incorrect','danger')
+            flash('Password incorrect!','danger')
             return redirect('login')
 
         login_user(user)
 
+
         #Checks if user's role is desk executive
         if current_user.role == 'desk':
-            flash('Welcome, '+ current_user.username,'success')
+            flash('Welcome, '+ current_user.username + '!','success')
             return redirect('/home')
 
         #Checks if user's role is pharmacist
         elif current_user.role == 'pharm':
-            flash('Welcome, '+ current_user.username, 'success')
+            flash('Welcome, '+ current_user.username + '!', 'success')
             return redirect('/pharmacist_dashboard')
 
         #Checks if user's role is diagnostic service executive
         elif current_user.role == 'diag':
-            flash('Welcome, '+ current_user.username, 'success')
+            flash('Welcome, '+ current_user.username + '!', 'success')
             return redirect('/diagnostic_dashboard')
 
         else:
@@ -87,5 +88,5 @@ def login():
 @login_required
 def logout():
     logout_user()
-    flash('successfully logged out','success')
+    flash('successfully logged out!','success')
     return redirect('/login')

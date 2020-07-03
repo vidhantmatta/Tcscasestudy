@@ -8,7 +8,7 @@
 <body>
     {% with messages = get_flashed_messages() %}
     {% if messages %}
-        {{messages[0]}}
+        {{messages[0].capitalize()}}
     {% endif %}
     {% endwith %}
     <h1>Sign up</h1>

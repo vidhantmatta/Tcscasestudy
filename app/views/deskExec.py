@@ -49,7 +49,7 @@ def new_patient():
         patient_city = request.form['city']
         patient_state = request.form['state']
         if(not len(patient_ssnId)==9 or not patient_ssnId.isdigit()):
-            flash("ssnId must be a 9 digit number" , "danger")
+            flash("ssnId must be a 9 digit number!" , "danger")
             return render_template("deskExec/newPatient.html", patient_ssnId=patient_ssnId,patient_name=patient_name,patient_age=patient_age,
             patient_admissionDate=patient_admissionDate, patient_city=patient_city,patient_state=patient_state)
 
@@ -58,13 +58,13 @@ def new_patient():
 
         # Alloting unique ssnId to each patient
         if(Patient.query.filter_by(ssnId=patient_ssnId).first()):
-            flash("Patient with the same ssnId already exists in the database" , "danger")
+            flash("Patient with the same ssnId already exists!" , "danger")
             return redirect('/home')
 
         # Checking if any form field is empty
         if(len(patient_name)==0 or len(str(patient_age))==0 or len(patient_admissionDate)==0 or len(patient_bedType)==0
         or len(patient_address)==0 or len(patient_city)==0 or len(patient_state)==0):
-            flash("No field must be empty" , "danger")
+            flash("No field must be empty!" , "danger")
             return render_template("deskExec/newPatient.html", patient_ssnId=patient_ssnId,patient_name=patient_name,patient_age=patient_age,
             patient_admissionDate=patient_admissionDate, patient_city=patient_city,patient_state=patient_state)
 
@@ -74,7 +74,7 @@ def new_patient():
         bedType =patient_bedType, address=patient_address, city=patient_city, state=patient_state)
         db.session.add(newPatient)
         db.session.commit()
-        flash('Patient created','success')
+        flash('Patient created.','success')
         return redirect('/patients')
     else:
         return render_template('deskExec/newPatient.html')
@@ -95,7 +95,7 @@ def search():
         searched_ssnId = request.form['ssnId']
         patient = Patient.query.filter_by(ssnId=searched_ssnId).first()
         if not patient:
-            flash('No patients found with given ssnID','danger')
+            flash('No patients found with given ssnID!','danger')
             if(current_user.role == 'desk'):
                 return redirect('/home')
             elif(current_user.role == 'pharm'):
@@ -113,7 +113,7 @@ def delete(id):
     patient = Patient.query.get_or_404(id)
     db.session.delete(patient)
     db.session.commit()
-    flash('Patient deleted','success')
+    flash('Patient deleted!','success')
     return redirect('/patients')
 
 
@@ -134,7 +134,7 @@ def update(id):
         #VALIDATIONS******************
         if(len(patient_name)==0 or len(str(patient_age))==0 or len(patient_admissionDate)==0 or len(patient_bedType)==0
         or len(patient_address)==0 or len(patient_city)==0 or len(patient_state)==0):
-            flash("No field must be empty" , "danger")
+            flash("No field must be empty!" , "danger")
             return render_template('deskExec/update.html', patient=patient)
         patient.name = patient_name
         patient.age = patient_age
@@ -144,7 +144,7 @@ def update(id):
         patient.city = patient_city
         patient.state = patient_state
         db.session.commit()
-        flash('Patient details updated','success')
+        flash('Patient details updated!','success')
         return redirect('/patients')
     else:
         return render_template('deskExec/update.html', patient=patient)
@@ -231,7 +231,7 @@ def discharge(id):
     patient.status = "Discharged"
     db.session.commit()
 
-    flash('Patient discharged','success')
+    flash('Patient discharged!','success')
     return redirect('/patients')
 
 
@@ -263,5 +263,5 @@ def reactivate(id):
     patient.status = "Active"
     db.session.commit()
 
-    flash('Patient status activated','success')
+    flash('Patient status activated!','success')
     return redirect('/patients')
