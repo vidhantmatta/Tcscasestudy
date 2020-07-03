@@ -77,12 +77,12 @@ def new_medi():
             newMedicine = Med(mname=medicine_name,quantity=medicine_quantity,Rate=medicine_rate)
             db.session.add(newMedicine)
             db.session.commit()
-            flash("New medicine added","success")
+            flash("New medicine added.","success")
             return redirect('/all_medicines')
         # Checks if medicine already exist....
         except IntegrityError:
             db.session.rollback()
-            flash("Medicine already exists","danger")
+            flash("Medicine already exist!","danger")
             return render_template('pharmacist/new_medicine.html')
     else:
         return render_template('pharmacist/new_medicine.html')
@@ -138,10 +138,9 @@ def addnewmed(ssn):
             medDict['rate'] = requiredMed.Rate
             medDict['amount'] = int(reqQuant) * int(requiredMed.Rate)
             newMed.append(medDict)
-            print(medDict['name'])
             return redirect(url_for('patientmedinfo',ssn=ssn))
         else:
-            flash("Quantity not availaible. Available quantity of this medicine is {}".format(requiredMed.quantity), "danger")
+            flash("Quantity not availaible! Available quantity of this medicine is {}".format(requiredMed.quantity), "danger")
             return redirect(url_for('issuemedicine', ssn=ssn))
 
 

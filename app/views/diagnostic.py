@@ -32,7 +32,6 @@ def diagnosticinfo():
             searched_ssnId = int(search_ssnId)
         except:
             flash("Please Enter a valid Integer Id!", "danger")
-            print("please enter an integer")
             return redirect('/diagnostic_dashboard')
         return redirect(url_for('patienttestinfo', ssn=searched_ssnId))
 
@@ -94,7 +93,6 @@ def new_test(ssn):
         testDict['name'] = test_name
         testDict['rate'] = requiredTest.rate
         tempPatientTests.append(testDict)
-        print(testDict['name'])
         return redirect(url_for('patienttestinfo', ssn=ssn))
 
 
@@ -142,11 +140,11 @@ def new_diagDB():
             newTest = Diagnosistests(test_name=test_name,rate=test_rate)
             db.session.add(newTest)
             db.session.commit()
-            flash("New Test added","success")
+            flash("New Test added.","success")
             return redirect('/all_tests')
         except IntegrityError:
             db.session.rollback()
-            flash("Test already exist","danger")
+            flash("Test already exist!","danger")
             return render_template('diagnostic/addTestDB.html')
     else:
         return render_template('diagnostic/addTestDB.html')
